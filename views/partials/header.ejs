@@ -7,7 +7,15 @@
   <body>
     <nav>
       <a href="/">Homepage</a>
-      <a href="/inventory">My Inventory</a>
+      <% if (user) { %>
+        <a href="/inventory">My Inventory</a>
         <a href="/grocery">My Grocery List</a>
+        <a href="/logout">Log Out</a>
+        <div class="user-login">
+          <img src="<%= user.avatar %>" class="user-avatar" alt="avatar" referrerpolicy="no-referrer">&nbsp;<%= user.name %>
+        </div>
+      <% } else { %>
+        <a href="/auth/google" class="login">LOG IN&nbsp;<img src="https://i.imgur.com/FHjYyi0.png"></a>
+      <% } %>
     </nav>
     <h1><%= title %></h1>
