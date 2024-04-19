@@ -39,7 +39,7 @@ const inventorySchema = new Schema({
     ref: 'User',
     required: true
   },
-  inventoryItem: [inventoryItem]
+  inventoryItem: [inventoryItemSchema]
 },
 {
   timestamps: true
