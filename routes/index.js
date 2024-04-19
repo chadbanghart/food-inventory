@@ -4,7 +4,7 @@ const passport = require('passport');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Food Inventory' });
+  res.render('home', { title: 'Food Inventory' });
 });
 
 router.get('/auth/google', passport.authenticate(
