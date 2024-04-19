@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const usersCtrl = require('../controllers/users');
+const ensureLoggedIn = require('../config/ensureLoggedIn');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// this router is mounted to a path that start with '/users'
+
+// get /users (show user index action)
+router.get('/', ensureLoggedIn, usersCtrl.index);
 
 module.exports = router;
