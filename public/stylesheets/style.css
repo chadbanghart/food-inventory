@@ -7,6 +7,23 @@ a {
   color: #00B7FF;
 }
 
+
+table {
+  font-size: 18px;
+}
+
+table thead th {
+  padding: 10px;
+  border-bottom: 2px solid #323135;
+}
+
+table td {
+  padding: 10px;
+  text-align: center;
+}
+
+
+
 .login {
   /* display: flex;
   justify-content: center;

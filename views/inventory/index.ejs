@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<table id="inventory-list">
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Unit</th>
+      <th>Item</th>
+      <th>Date Added</th>
+      <th>Date of Expire</th>
+      <th>Location</th>
+      <th>Favorite Item</th>
+      <th>Add to GL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% inventory.forEach(function(i) { %>
+      <tr>
+        <td><%= i.quantity %></td>
+        <td><%= i.unit %></td>
+        <td><%= i.item %></td>
+        <td><%= createdAt %></td>
+        <td><%= i.dateOfExpire %></td>
+        <td><%= i.location %></td>
+        <td><%= i.favItem %></td>
+        <td><a href="">Add</a></td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+<%- include('../partials/footer') %>
