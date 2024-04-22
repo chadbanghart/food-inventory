@@ -14,6 +14,7 @@
         <th>Favorite Item</th>
         <th>Add to GL</th>
         <th>Edit Item</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -29,6 +30,11 @@
           <td><%= i.favItem ? 'Yes' : 'No' %></td>
           <td><a href="">Add</a></td>
           <td><a href="/inventory/<%= i._id %>/edit">Edit</a></td>
+          <td>
+              <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
+                <button type="submit">DELETE</button>
+              </form>
+          </td>
         </tr>
         <% }); %>
       <% }); %>

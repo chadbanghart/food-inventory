@@ -6,9 +6,36 @@ module.exports = {
   index,
   new: newInventory,
   create,
-  edit
+  edit,
+  update,
+  delete: deleteOne
 };
 
+async function deleteOne(req, res) {
+  const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
+  inventory.inventoryItem.remove(req.params.id);
+  // Save the updated inventory
+  await inventory.save();
+  // Redirect back to the inventory's show view
+  res.redirect(`/inventory`);
+}
+
+async function update(req, res) {
+  const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
+  let inventoryItemSubDoc = inventory.inventoryItem.id(req.params.id);
+  inventoryItemSubDoc.quantity = req.body.quantity;
+  inventoryItemSubDoc.unit = req.body.unit;
+  inventoryItemSubDoc.expire = req.body.expire;
+  inventoryItemSubDoc.location = req.body.location;
+  inventoryItemSubDoc.favItem = req.body.favItem;
+  try {
+    await inventory.save();
+  } catch (err) {
+    console.log(err.message);
+  }
+  // Redirect back to the book's show view
+  res.redirect(`/inventory`);
+}
 
 async function index(req, res) {
   const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItem.item');
@@ -61,9 +88,9 @@ async function create(req, res) {
 
 async function edit(req, res) {
   const userId = req.user._id;
-  const itemId = req.params.itemId;
+  const id = req.params.id;
   try {
-    const inventory = await Inventory.findOne({user: userId, 'inventoryItem._id': itemId}, 'inventoryItem.$').populate('inventoryItem.item');
+    const inventory = await Inventory.findOne({user: userId, 'inventoryItem._id': id}, 'inventoryItem.$').populate('inventoryItem.item');
     if (!inventory) return res.render('/inventory');
     const item = inventory.inventoryItem[0];
     item.expireFormatted = formatDate(item.expire);

@@ -1,29 +1,29 @@
 <%- include('../partials/header') %>
 
 <h2>Edit an Item From Your Inventory</h2>
-<form action="/inventory/<%= item._id %>/update" method="POST">
-    <label>Quantity:
-      <input type="number" name="quantity" min="0" step=".1" value="<%= item.quantity %>">
-    </label><br>
-    <label>Unit:
-      <input type="text" name="unit" value="<%= item.unit %>">
-    </label><br>
-    <label>Item:
-      <input type="text" name="item" value="<%= item.item.name %>">
-    </label><br>
-    <label>Date Of Expire:
-      <input type="date" name="expire" value="<%= item.expireFormatted %>">
-    </label><br>
-    <label>Location:
-      <select name="location">
-        <option value="Fridge" <%= item.location === 'Fridge' ? 'selected' : '' %>>Fridge</option>
-        <option value="Freezer" <%= item.location === 'Freezer' ? 'selected' : '' %>>Freezer</option>
-        <option value="Pantry" <%= item.location === 'Pantry' ? 'selected' : '' %>>Pantry</option>
-      </select>
-    </label><br>
-    <label>Favorite Item:
-      <input type="checkbox" name="favItem">
-    </label><br>  
+<form action="/inventory/<%= item._id %>?_method=PUT" method="POST">
+  <label>Quantity:
+    <input type="number" name="quantity" min="0" step=".1" value="<%= item.quantity %>">
+  </label><br>
+  <label>Unit:
+    <input type="text" name="unit" value="<%= item.unit %>">
+  </label><br>
+  <label>Item:
+    <input type="text" name="item" value="<%= item.item.name %>">
+  </label><br>
+  <label>Date Of Expire:
+    <input type="date" name="expire" value="<%= item.expireFormatted %>">
+  </label><br>
+  <label>Location:
+    <select name="location">
+      <option value="Fridge" <%= item.location === 'Fridge' ? 'selected' : '' %>>Fridge</option>
+      <option value="Freezer" <%= item.location === 'Freezer' ? 'selected' : '' %>>Freezer</option>
+      <option value="Pantry" <%= item.location === 'Pantry' ? 'selected' : '' %>>Pantry</option>
+    </select>
+  </label><br>
+  <label>Favorite Item:
+    <input type="checkbox" name="favItem">
+  </label><br>  
   <input type="submit" value="Edit Item">
 </form>
 
