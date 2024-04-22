@@ -7,5 +7,9 @@ const ensureLoggedIn = require('../config/ensureLoggedIn');
 
 //GET /inventory
 router.get('/inventory', ensureLoggedIn, inventoryCtrl.index);
+// GET /inventory/new (new action)
+router.get('/inventory/new', ensureLoggedIn, inventoryCtrl.new);
+// POST /inventory (create action)
+router.post('/inventory', ensureLoggedIn, inventoryCtrl.create);
 
 module.exports = router;

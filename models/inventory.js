@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const inventoryItemSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
   quantity: {
     type: Number,
-    min: 0
+    min: 0,
+    required: true
   },
   unit: {
     type: String
@@ -19,7 +15,7 @@ const inventoryItemSchema = new Schema({
     ref: 'Item',
     required: true
   },
-  dateOfExpire: {
+  expire: {
     type: Date
   },
   location: {

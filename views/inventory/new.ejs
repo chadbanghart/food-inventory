@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<h2>Add A New Item to Inventory</h2>
+<form action="/inventory" method="POST">
+  <label>Quantity:
+    <input type="number" name="quantity" min="0" step=".1">
+  </label><br>
+  <label>Unit:
+    <input type="text" name="unit">
+  </label><br>
+  <label>Item:
+    <input type="text" name="item">
+  </label><br>
+  <label>Date Of Expire:
+    <input type="date" name="expire">
+  </label><br>
+  <label>Location:
+    <select name="location">
+      <option value="Fridge">Fridge</option>
+      <option value="Freezer">Freezer</option>
+      <option value="Pantry">Pantry</option>
+    </select>   
+  </label><br>
+  <label>Favorite Item:
+    <input type="checkbox" name="favItem">
+  </label><br>
+  <input type="submit" value="Add Item">
+</form>
+<p><%= errorMsg %></p>
+
+
+<%- include('../partials/footer') %>

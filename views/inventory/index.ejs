@@ -1,32 +1,39 @@
 <%- include('../partials/header') %>
 
-<table id="inventory-list">
-  <thead>
-    <tr>
-      <th>Quantity</th>
-      <th>Unit</th>
-      <th>Item</th>
-      <th>Date Added</th>
-      <th>Date of Expire</th>
-      <th>Location</th>
-      <th>Favorite Item</th>
-      <th>Add to GL</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% inventory.forEach(function(i) { %>
+<% if (inventory && inventory.length > 0) { %>
+  <p>To add another Item <a href="/inventory/new">Click here</a>
+  <table id="inventory-list">
+    <thead>
       <tr>
-        <td><%= i.quantity %></td>
-        <td><%= i.unit %></td>
-        <td><%= i.item %></td>
-        <td><%= createdAt %></td>
-        <td><%= i.dateOfExpire %></td>
-        <td><%= i.location %></td>
-        <td><%= i.favItem %></td>
-        <td><a href="">Add</a></td>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Item</th>
+        <th>Date Added</th>
+        <th>Date of Expire</th>
+        <th>Location</th>
+        <th>Favorite Item</th>
+        <th>Add to GL</th>
       </tr>
-    <% }); %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% inventory.forEach(function(inv) { %>
+        <% inv.inventoryItem.forEach(function(i) { %>
+        <tr>
+          <td><%= i.quantity %></td>
+          <td><%= i.unit %></td>
+          <td><%= i.item.name %></td>
+          <td><%= new Date(inv.createdAt).toDateString() %></td>
+          <td><%= i.expire ? new Date(i.expire).toDateString() : 'N/A' %></td>
+          <td><%= i.location %></td>
+          <td><%= i.favItem ? 'Yes' : 'No' %></td>
+          <td><a href="">Add</a></td>
+        </tr>
+        <% }); %>
+      <% }); %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p>You don't have any inventories created yet! <a href="/inventory/new">Click here</a> to get started with building your inventory</p>
+<% } %>
 
 <%- include('../partials/footer') %>
