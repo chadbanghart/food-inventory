@@ -14,7 +14,7 @@
         <th>Favorite Item</th>
         <th>Add to GL</th>
         <th>Edit Item</th>
-        <th></th>
+        <th>Delete Item</th>
       </tr>
     </thead>
     <tbody>
@@ -24,8 +24,8 @@
           <td><%= i.quantity %></td>
           <td><%= i.unit %></td>
           <td><%= i.item.name %></td>
-          <td><%= new Date(i.createdAt).toDateString() %></td>
-          <td><%= i.expire ? new Date(i.expire).toDateString() : 'N/A' %></td>
+          <td><%= new Date(i.createdAt).toLocaleDateString() %></td>
+          <td><%= i.expire ? new Date(i.expire).toLocaleDateString() : 'N/A' %></td>
           <td><%= i.location %></td>
           <td><%= i.favItem ? 'Yes' : 'No' %></td>
           <td><a href="">Add</a></td>

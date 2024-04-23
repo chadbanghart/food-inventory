@@ -1,4 +1,3 @@
-const inventory = require('../models/inventory');
 const Inventory = require('../models/inventory');
 const Item = require('../models/item');
 
@@ -22,12 +21,17 @@ async function deleteOne(req, res) {
 
 async function update(req, res) {
   const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
+  console.log(req.body);
   let inventoryItemSubDoc = inventory.inventoryItem.id(req.params.id);
+  let item = await Item.findOneAndUpdate({_id: req.body.itemId}, {name: req.body.item}, {new: true});
+  await item.save();
+  inventoryItemSubDoc.item = item;
   inventoryItemSubDoc.quantity = req.body.quantity;
   inventoryItemSubDoc.unit = req.body.unit;
   inventoryItemSubDoc.expire = req.body.expire;
   inventoryItemSubDoc.location = req.body.location;
-  inventoryItemSubDoc.favItem = req.body.favItem;
+  inventoryItemSubDoc.favItem = !!req.body.favItem;
+  
   try {
     await inventory.save();
   } catch (err) {
@@ -63,7 +67,7 @@ async function create(req, res) {
           unit: req.body.unit,
           expire: req.body.expire,
           location: req.body.location,
-          favItem: req.body.favItem
+          favItem: !!req.body.favItem
       };
 
       // Check for existing inventory
@@ -87,6 +91,7 @@ async function create(req, res) {
 }
 
 async function edit(req, res) {
+  req.body.favitem = !!req.body.favitem;
   const userId = req.user._id;
   const id = req.params.id;
   try {

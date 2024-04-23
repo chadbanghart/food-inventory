@@ -7,11 +7,10 @@ const grocerySchema = new Schema({
     ref: 'User',
     required: true
   },
-  item: {
+  groceryItem: [{
     type: Schema.Types.ObjectId,
     ref: 'Item',
-    required: true
-  }
+  }]
 }, {
   timestamps: true
 });

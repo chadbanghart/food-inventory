@@ -10,6 +10,7 @@
   </label><br>
   <label>Item:
     <input type="text" name="item" value="<%= item.item.name %>">
+    <input type="hidden" name="itemId" value="<%= item.item._id %>">
   </label><br>
   <label>Date Of Expire:
     <input type="date" name="expire" value="<%= item.expireFormatted %>">

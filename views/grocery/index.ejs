@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+<% if (grocery && grocery.groceryItem.length) { %>
+  <table id="inventory-list">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% grocery.groceryItem.forEach(function(i) { %>
+        <tr class="item-row">
+          <td>
+            <form action="">
+              <button type="submit">X</button>
+            </form>
+          </td>
+          <td><%= i.name %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <form action="/grocery" method="post">
+    <input type="text" name="item">
+    <button type="submit" value="Add Item">Add Item</button>
+  </form>
+<% } else { %>
+  <form action="/grocery" method="post">
+    <input type="text" name="item">
+    <button type="submit" value="Add Item">Add Item</button>
+  </form>
+<% } %>
+
+<%- include('../partials/footer') %>
