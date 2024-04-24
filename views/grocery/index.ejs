@@ -12,7 +12,7 @@
       <% grocery.groceryItem.forEach(function(i) { %>
         <tr class="item-row">
           <td>
-            <form action="">
+            <form action="/grocery/item/<%= i._id %>?_method=DELETE" method="POST">
               <button type="submit">X</button>
             </form>
           </td>

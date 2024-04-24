@@ -7,7 +7,9 @@ const ensureLoggedIn = require('../config/ensureLoggedIn');
 
 // GET /grocery (index functionality)
 router.get('/grocery', ensureLoggedIn, groceryCtrl.index);
-// POST /grocery/:id/item (create functionality)
+// POST /grocery (create functionality)
 router.post('/grocery', ensureLoggedIn, groceryCtrl.create);
+// DELETE /item/:id (delete functionality)
+router.delete('/grocery/item/:id', ensureLoggedIn, groceryCtrl.delete);
 
 module.exports = router;
