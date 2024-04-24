@@ -15,6 +15,8 @@ router.get('/inventory/:id/edit', ensureLoggedIn, inventoryCtrl.edit);
 router.put('/inventory/:id', ensureLoggedIn, inventoryCtrl.update);
 // POST /inventory (create action)
 router.post('/inventory', ensureLoggedIn, inventoryCtrl.create);
+// POST /inventory/:id (addGrocery action)
+router.post('/item/:id', ensureLoggedIn, inventoryCtrl.addGrocery);
 // DELETE /item/:id (delete action)
 router.delete('/item/:id', ensureLoggedIn, inventoryCtrl.delete);
 

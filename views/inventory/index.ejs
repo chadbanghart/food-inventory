@@ -2,6 +2,15 @@
 
 <% if (inventory && inventory.length > 0) { %>
   <p>To add another Item <a href="/inventory/new">Click here</a>
+  <label for="">Sort options:</label>
+    <select name="" id="">
+    <option value="">Sort by item A-Z</option>
+    <option value="">Sort by item Z-A</option>
+    <option value="">Sort by Location A-Z</option>
+    <option value="">Sort by Location Z-A</option>
+    <option value="">Sort by Expire Date closest first</option>
+    <option value="">Sort by Expire Date furthest first</option>
+  </select>
   <table id="inventory-list">
     <thead>
       <tr>
@@ -28,7 +37,12 @@
           <td><%= i.expire ? new Date(i.expire).toLocaleDateString() : 'N/A' %></td>
           <td><%= i.location %></td>
           <td><%= i.favItem ? 'Yes' : 'No' %></td>
-          <td><a href="">Add</a></td>
+          <td>
+            <form action="/item/<%= i._id %>" method="POST">
+              <input type="hidden" name="item" value="<%= i.item._id %>">
+              <button type="submit">Add</button>
+            </form>
+          </td>
           <td><a href="/inventory/<%= i._id %>/edit">Edit</a></td>
           <td>
               <form action="/item/<%= i._id %>?_method=DELETE" method="POST">

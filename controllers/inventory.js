@@ -1,5 +1,6 @@
 const Inventory = require('../models/inventory');
 const Item = require('../models/item');
+const Grocery = require('../models/grocery');
 
 module.exports = {
   index,
@@ -7,8 +8,17 @@ module.exports = {
   create,
   edit,
   update,
-  delete: deleteOne
+  delete: deleteOne,
+  addGrocery
 };
+
+async function addGrocery(req, res) {
+  const item = await Item.findById({_id: req.body.item});
+  const grocery = await Grocery.findOne({user: req.user._id});
+  grocery.groceryItem.push(item);
+  await grocery.save();
+  res.redirect('/grocery');
+}
 
 async function deleteOne(req, res) {
   const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
@@ -21,7 +31,6 @@ async function deleteOne(req, res) {
 
 async function update(req, res) {
   const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
-  console.log(req.body);
   let inventoryItemSubDoc = inventory.inventoryItem.id(req.params.id);
   let item = await Item.findOneAndUpdate({_id: req.body.itemId}, {name: req.body.item}, {new: true});
   await item.save();
