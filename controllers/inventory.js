@@ -23,9 +23,7 @@ async function addGrocery(req, res) {
 async function deleteOne(req, res) {
   const inventory = await Inventory.findOne({'inventoryItems._id': req.params.id});
   inventory.inventoryItems.remove(req.params.id);
-  // Save the updated inventory
   await inventory.save();
-  // Redirect back to the inventory's show view
   res.redirect(`/inventory`);
 }
 
@@ -38,26 +36,25 @@ async function update(req, res) {
   inventoryItemSubDoc.quantity = req.body.quantity;
   inventoryItemSubDoc.unit = req.body.unit;
   inventoryItemSubDoc.expire = req.body.expire;
+  inventoryItemSubDoc.category = req.body.category;
   inventoryItemSubDoc.location = req.body.location;
   inventoryItemSubDoc.favItem = !!req.body.favItem;
-  
   try {
     await inventory.save();
   } catch (err) {
     console.log(err.message);
   }
-  // Redirect back to the book's show view
   res.redirect(`/inventory`);
 }
 
-// async function index(req, res) {
-//   const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItems.item');
-//   res.render('inventory/index', { title: 'My Inventory', inventory });
-// }
 
 async function index(req, res) {
   const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItems.item');
-  const expireMsg = 'You have Items that are about to expire! Consider removing from inventory and/or adding to your grocery list!'
+  let inventoryMsg = '';
+  const expireMsg = 'You have Items that are about to expire! Consider removing from inventory and/or adding to your grocery list!';
+  const favItemExpireMsg = "One of your favorite items is about to expire. It has been added to your Grocery List for you!"
+  // const expires = inventory.inventoryItems;
+  // if (expires.style.color === 'text-danger') return expireMsg;
   let sort = req.query.sort || 'createdAt';
   if (inventory  && inventory.length) {
     if (sort.includes('-')) {
@@ -75,7 +72,7 @@ async function index(req, res) {
       }
     }
   }
-  res.render('inventory/index', { title: 'My Inventory', inventory, sort, expireMsg, formatDate, expiresSoon });
+  res.render('inventory/index', { title: 'My Inventory', inventory, sort, inventoryMsg, formatDate, expiresSoon });
 }
 
 function newInventory(req, res) {
@@ -97,8 +94,9 @@ async function create(req, res) {
           item: item._id,
           quantity: req.body.quantity,
           unit: req.body.unit,
-          expire: formatDate(req.body.expire),
+          expire: req.body.expire,
           location: req.body.location,
+          category: req.body.category,
           favItem: !!req.body.favItem
       };
 
@@ -142,7 +140,7 @@ function formatDate(date) {
   if (!date) return '';
   const d = new Date(date);
   let month = '' + (d.getMonth() + 1),
-      day = '' + (d.getDate()),
+      day = '' + (d.getDate()+ 1),
       year = d.getFullYear();
   if (month.length < 2) 
       month = '0' + month;

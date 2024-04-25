@@ -18,6 +18,9 @@ const inventoryItemSchema = new Schema({
   expire: {
     type: Date
   },
+  category: {
+    type: String
+  },
   location: {
     type: String,
     enum: ['Fridge', 'Freezer', 'Pantry']

@@ -27,6 +27,12 @@
     </div>
   </div>
   <div class="row form-group mb-3">
+    <label class="col-sm-2 col-form-label">Category:</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="category" value="<%= item.category %>">
+    </div>
+  </div>
+  <div class="row form-group mb-3">
     <label class="col-sm-2 col-form-label">Location:</label>
     <div class="col-sm-4">
       <select class="form-control" name="location">
@@ -39,7 +45,7 @@
   <div class="row form-group mb-3">
     <label class="col-sm-2 col-form-label">Favorite Item:</label>
     <div class="col-sm-4">
-      <input type="checkbox" class="form-check-input" name="favItem">
+      <input type="checkbox" class="form-check-input" name="favItem" <%= item.favItem ? 'checked' : '' %>>
     </div>
   </div>
   <div class="row">
