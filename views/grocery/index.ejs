@@ -1,37 +1,55 @@
 <%- include('../partials/header') %>
 
 <% if (grocery && grocery.groceryItem.length) { %>
-  <table id="inventory-list" class="">
-    <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col">Item</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% grocery.groceryItem.forEach(function(i) { %>
-        <tr class="">
-          <th scope="row"></th>
-          <td>
-            <form action="/grocery/item/<%= i._id %>?_method=DELETE" method="POST">
-              <button class="btn btn-outline-dark" type="submit">X</button>
-            </form>
-          </td>
-          <td><%= i.name %></td>
-        </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <form action="/grocery" method="post">
-    <input type="text" name="item">
-    <button type="submit" value="Add Item" class="btn btn-outline-dark">Add Item</button>
-  </form>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col" class="text-start">Item</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% grocery.groceryItem.forEach(function(i) { %>
+              <tr>
+                <th scope="row"></th>
+                <td>
+                  <form action="/grocery/item/<%= i._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-outline-dark" type="submit">X</button>
+                  </form>
+                </td>
+                <td class="text-start"><%= i.name %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <div class="input-group mb-3">
+          <form action="/grocery" method="post" class="w-100">
+            <div class="input-group">
+              <input type="text" name="item" class="form-control" placeholder="Add new item">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-dark">Add Item</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 <% } else { %>
-  <form action="/grocery" method="post">
-    <input type="text" name="item">
-    <button type="submit" value="Add Item" class="btn btn-outline-dark">Add Item</button>
-  </form>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <form action="/grocery" method="post" class="form-inline justify-content-center">
+          <input type="text" name="item" class="form-control mb-2 mr-sm-2">
+          <button type="submit" value="Add Item" class="btn btn-outline-dark">Add Item</button>
+        </form>
+      </div>
+    </div>
+  </div>
 <% } %>
 
 <%- include('../partials/footer') %>

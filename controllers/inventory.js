@@ -56,8 +56,8 @@ async function update(req, res) {
 // }
 
 async function index(req, res) {
-  let sort = req.query.sort || 'createdAt';
   const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItem.item');
+  let sort = req.query.sort || 'createdAt';
   if (sort.includes('-')) {
     sort = sort.substring(1);
     if (sort === 'item') {
@@ -72,7 +72,6 @@ async function index(req, res) {
       inventory[0].inventoryItem.sort((a, b) => b[sort] < a[sort] ? 1 : -1);
     }
   }
-  console.log(inventory[0].inventoryItem);
   res.render('inventory/index', { title: 'My Inventory', inventory, sort });
 }
 
@@ -140,7 +139,7 @@ function formatDate(date) {
   if (!date) return '';
   const d = new Date(date);
   let month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
+      day = '' + (d.getDate()),
       year = d.getFullYear();
   if (month.length < 2) 
       month = '0' + month;

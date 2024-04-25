@@ -23,7 +23,9 @@ table td {
   text-align: center;
 }
 
-
+.push-left {
+  display: flex;
+}
 
 .login {
   /* display: flex;

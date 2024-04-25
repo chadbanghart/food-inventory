@@ -4,39 +4,33 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </head>
   <body>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #b7d8f0;">
       <% if (user) { %>
-        <ul class="nav justify-content-end">
-          <li class="nav-item">
-            <a class="nav-link" href="/users">Homepage</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/inventory">My Inventory</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/grocery">My Grocery List</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Log Out</a>
-          </li>
-          <li class="nav-item">
-            <div class="user-login">
-              <img src="<%= user.avatar %>" class="user-avatar" alt="avatar" referrerpolicy="no-referrer">&nbsp;<%= user.name %>
+        <div class="container-fluid">
+          <div class="navbar-nav me-auto">
+            <a class="nav-item nav-link" href="/users">Homepage</a>
+            <a class="nav-item nav-link" href="/inventory">My Inventory</a>
+            <a class="nav-item nav-link" href="/grocery">My Grocery List</a>
+          </div>
+          <div class="navbar nav ml-auto">
+            <a class="nav-item nav-link" href="/logout">Log Out</a>
+            <div class="nav-item user-login align-items-center"></div>
+              <img src="<%= user.avatar %>" class="rounded-circle" alt="avatar" style="width: 30px; height: 30px;" referrerpolicy="no-referrer">
+              <span class="ml-2"><%= user.name %></span>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       <% } else { %>
-        <ul class="nav justify-content-end">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Homepage</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/auth/google" class="login">LOG IN&nbsp;<img src="https://i.imgur.com/FHjYyi0.png"></a>
-          </li>
-        </ul>
+        <div class="container-fluid px-4">
+          <div class="navbar nav me-auto">
+            <a class="nav-item nav-link" href="/">Homepage</a>
+          </div>
+          <div class="navbar nav ms-auto">
+            <a class="nav-item nav-link" href="/auth/google" class="login">Log In&nbsp;<img src="https://i.imgur.com/FHjYyi0.png" alt="Google login"></a>
+          </div>
+        </div>
       <% } %>
     </nav>
-    <h1><%= title %></h1>
+    <h1 style="text-align: center;"><%= title %></h1>

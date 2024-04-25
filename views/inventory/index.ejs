@@ -1,19 +1,21 @@
 <%- include('../partials/header') %>
 
 <% if (inventory && inventory.length > 0) { %>
-  <p>To add another Item <a href="/inventory/new">Click here</a>
-
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Sort By:
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="/inventory?sort=item">Item: A-Z</a>
-      <a class="dropdown-item" href="/inventory?sort=-item">Item: Z-A</a>
-      <a class="dropdown-item" href="/inventory?sort=location">Location A-Z</a>
-      <a class="dropdown-item" href="/inventory?sort=-location">Location: Z-A</a>
-      <a class="dropdown-item" href="/inventory?sort=expire">Expire Date: Closest</a>
-      <a class="dropdown-item" href="/inventory?sort=-expire">Expire Date: Furthest</a>
+  <div class="d-flex justify-content-between mb-3 p-2">
+    <a class="btn btn-outline-dark" href="/inventory/new">Create New Inventory Item</a>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Sort By
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="/inventory?sort=item">Item: A-Z</a>
+        <a class="dropdown-item" href="/inventory?sort=-item">Item: Z-A</a>
+        <a class="dropdown-item" href="/inventory?sort=location">Location A-Z</a>
+        <a class="dropdown-item" href="/inventory?sort=-location">Location: Z-A</a>
+        <a class="dropdown-item" href="/inventory?sort=expire">Expire Date: First</a>
+        <a class="dropdown-item" href="/inventory?sort=-expire">Expire Date: Last</a>
+        <a class="dropdown-item" href="/inventory?sort=createdAt">Date Added</a>
+      </div>
     </div>
   </div>
   <table class="table table-striped">
@@ -22,11 +24,10 @@
         <th scope="col"></th>
         <th scope="col">Quantity</th>
         <th scope="col">Unit</th>
-        <th scope="col"><a href="/inventory?sort=item">⬇</a>Item<a href="/inventory?sort=-item">⬆</a></th>
+        <th scope="col">Item</a></th>
         <th scope="col">Date Added</th>
-        <th scope="col"><a href="/inventory?sort=expire">⬇</a>Date of Expire<a href="/inventory?sort=-expire">⬆</a></th>
-        <!-- <th scope="col">Location</th> -->
-        <th scope="col"><a href="/inventory?sort=location">⬇</a>Location<a href="/inventory?sort=-location">⬆</a></th>
+        <th scope="col">Date of Expire</th>
+        <th scope="col">Location</th>
         <th scope="col">Favorite Item</th>
         <th scope="col">Add to GL</th>
         <th scope="col">Edit Item</th>
@@ -39,19 +40,19 @@
         <tr>
           <th scope="row"></th>
           <td><%= i.quantity %></td>
-          <td><%= i.unit %></td>
+          <td><%= i.unit ? i.unit : 'N/A' %></td>
           <td><%= i.item.name %></td>
           <td><%= new Date(i.createdAt).toLocaleDateString() %></td>
           <td><%= i.expire ? new Date(i.expire).toLocaleDateString() : 'N/A' %></td>
           <td><%= i.location %></td>
-          <td><%= i.favItem ? 'Yes' : 'No' %></td>
+          <td><%= i.favItem ? '❤️' : '' %></td>
           <td>
             <form action="/item/<%= i._id %>" method="POST">
               <input type="hidden" name="item" value="<%= i.item._id %>">
               <button class="btn btn-outline-dark" type="submit">Add</button>
             </form>
           </td>
-          <td><a href="/inventory/<%= i._id %>/edit">Edit</a></td>
+          <td><a href="/inventory/<%= i._id %>/edit" class="btn btn-outline-dark">Edit</a></td>
           <td>
               <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
                 <button class="btn btn-outline-dark" type="submit">DELETE</button>
@@ -63,7 +64,7 @@
     </tbody>
   </table>
 <% } else { %>
-  <p>You don't have any inventories created yet! <a href="/inventory/new">Click here</a> to get started with building your inventory</p>
+  <p>You don't have any inventories created yet! <a class="btn btn-outline-dark" href="/inventory/new">Create New Inventory Item</a> to get started with building your inventory</p>
 <% } %>
 
 <%- include('../partials/footer') %>
