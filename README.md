@@ -3,6 +3,11 @@ Do you have issues keeping track of your food items in your household? Or maybe 
 My app solves many of the issues people face when it comes to their food inventory. With a simplistic and clean interface, to straight-forward application functionality. 
 You can now track your food inventory and manage your grocery list with ease!
 
+## Screenshots
+![app on load](images/onLoad.png)
+![inventory Page](images/inventoryList.png)
+![Grocery List Page](images.groceryList.png)
+
 ## Tech used
 - Javascript
 - Express
