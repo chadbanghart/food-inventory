@@ -15,6 +15,7 @@ table {
 table thead th {
   padding: 10px;
   border-bottom: 2px solid #323135;
+  text-align: center;
 }
 
 table td {
@@ -31,7 +32,7 @@ table td {
   height: 34px;
 }
 
-.login img {
+.nav-link img {
   height: 30px;
 }
 

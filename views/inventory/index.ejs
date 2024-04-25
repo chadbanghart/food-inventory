@@ -2,34 +2,42 @@
 
 <% if (inventory && inventory.length > 0) { %>
   <p>To add another Item <a href="/inventory/new">Click here</a>
-  <label for="">Sort options:</label>
-    <select name="" id="">
-    <option value="">Sort by item A-Z</option>
-    <option value="">Sort by item Z-A</option>
-    <option value="">Sort by Location A-Z</option>
-    <option value="">Sort by Location Z-A</option>
-    <option value="">Sort by Expire Date closest first</option>
-    <option value="">Sort by Expire Date furthest first</option>
-  </select>
-  <table id="inventory-list">
+
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort By:
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="/inventory?sort=item">Item: A-Z</a>
+      <a class="dropdown-item" href="/inventory?sort=-item">Item: Z-A</a>
+      <a class="dropdown-item" href="/inventory?sort=location">Location A-Z</a>
+      <a class="dropdown-item" href="/inventory?sort=-location">Location: Z-A</a>
+      <a class="dropdown-item" href="/inventory?sort=expire">Expire Date: Closest</a>
+      <a class="dropdown-item" href="/inventory?sort=-expire">Expire Date: Furthest</a>
+    </div>
+  </div>
+  <table class="table table-striped">
     <thead>
       <tr>
-        <th>Quantity</th>
-        <th>Unit</th>
-        <th>Item</th>
-        <th>Date Added</th>
-        <th>Date of Expire</th>
-        <th>Location</th>
-        <th>Favorite Item</th>
-        <th>Add to GL</th>
-        <th>Edit Item</th>
-        <th>Delete Item</th>
+        <th scope="col"></th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Unit</th>
+        <th scope="col"><a href="/inventory?sort=item">⬇</a>Item<a href="/inventory?sort=-item">⬆</a></th>
+        <th scope="col">Date Added</th>
+        <th scope="col"><a href="/inventory?sort=expire">⬇</a>Date of Expire<a href="/inventory?sort=-expire">⬆</a></th>
+        <!-- <th scope="col">Location</th> -->
+        <th scope="col"><a href="/inventory?sort=location">⬇</a>Location<a href="/inventory?sort=-location">⬆</a></th>
+        <th scope="col">Favorite Item</th>
+        <th scope="col">Add to GL</th>
+        <th scope="col">Edit Item</th>
+        <th scope="col">Delete Item</th>
       </tr>
     </thead>
     <tbody>
       <% inventory.forEach(function(inv) { %>
         <% inv.inventoryItem.forEach(function(i) { %>
         <tr>
+          <th scope="row"></th>
           <td><%= i.quantity %></td>
           <td><%= i.unit %></td>
           <td><%= i.item.name %></td>
@@ -40,13 +48,13 @@
           <td>
             <form action="/item/<%= i._id %>" method="POST">
               <input type="hidden" name="item" value="<%= i.item._id %>">
-              <button type="submit">Add</button>
+              <button class="btn btn-outline-dark" type="submit">Add</button>
             </form>
           </td>
           <td><a href="/inventory/<%= i._id %>/edit">Edit</a></td>
           <td>
               <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
-                <button type="submit">DELETE</button>
+                <button class="btn btn-outline-dark" type="submit">DELETE</button>
               </form>
           </td>
         </tr>

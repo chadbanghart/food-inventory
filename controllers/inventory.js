@@ -50,9 +50,30 @@ async function update(req, res) {
   res.redirect(`/inventory`);
 }
 
+// async function index(req, res) {
+//   const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItem.item');
+//   res.render('inventory/index', { title: 'My Inventory', inventory });
+// }
+
 async function index(req, res) {
-  const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItem.item');
-  res.render('inventory/index', { title: 'My Inventory', inventory });
+  let sort = req.query.sort || 'createdAt';
+  const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItem.item');
+  if (sort.includes('-')) {
+    sort = sort.substring(1);
+    if (sort === 'item') {
+      inventory[0].inventoryItem.sort((a, b) => a[sort].name < b[sort].name ? 1 : -1);
+    } else {
+      inventory[0].inventoryItem.sort((a, b) => a[sort] < b[sort] ? 1 : -1);
+    }
+  } else {
+    if (sort === 'item') {
+      inventory[0].inventoryItem.sort((a, b) => b[sort].name < a[sort].name ? 1 : -1);
+    } else {
+      inventory[0].inventoryItem.sort((a, b) => b[sort] < a[sort] ? 1 : -1);
+    }
+  }
+  console.log(inventory[0].inventoryItem);
+  res.render('inventory/index', { title: 'My Inventory', inventory, sort });
 }
 
 function newInventory(req, res) {
