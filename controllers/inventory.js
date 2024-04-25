@@ -21,8 +21,8 @@ async function addGrocery(req, res) {
 }
 
 async function deleteOne(req, res) {
-  const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
-  inventory.inventoryItem.remove(req.params.id);
+  const inventory = await Inventory.findOne({'inventoryItems._id': req.params.id});
+  inventory.inventoryItems.remove(req.params.id);
   // Save the updated inventory
   await inventory.save();
   // Redirect back to the inventory's show view
@@ -30,8 +30,8 @@ async function deleteOne(req, res) {
 }
 
 async function update(req, res) {
-  const inventory = await Inventory.findOne({'inventoryItem._id': req.params.id});
-  let inventoryItemSubDoc = inventory.inventoryItem.id(req.params.id);
+  const inventory = await Inventory.findOne({'inventoryItems._id': req.params.id});
+  let inventoryItemSubDoc = inventory.inventoryItems.id(req.params.id);
   let item = await Item.findOneAndUpdate({_id: req.body.itemId}, {name: req.body.item}, {new: true});
   await item.save();
   inventoryItemSubDoc.item = item;
@@ -51,32 +51,35 @@ async function update(req, res) {
 }
 
 // async function index(req, res) {
-//   const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItem.item');
+//   const inventory = await Inventory.find({user: req.user._id}).populate('inventoryItems.item');
 //   res.render('inventory/index', { title: 'My Inventory', inventory });
 // }
 
 async function index(req, res) {
-  const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItem.item');
+  const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItems.item');
+  const expireMsg = 'You have Items that are about to expire! Consider removing from inventory and/or adding to your grocery list!'
   let sort = req.query.sort || 'createdAt';
-  if (sort.includes('-')) {
-    sort = sort.substring(1);
-    if (sort === 'item') {
-      inventory[0].inventoryItem.sort((a, b) => a[sort].name < b[sort].name ? 1 : -1);
+  if (inventory  && inventory.length) {
+    if (sort.includes('-')) {
+      sort = sort.substring(1);
+      if (sort === 'item') {
+        inventory[0].inventoryItems.sort((a, b) => a[sort].name < b[sort].name ? 1 : -1);
+      } else {
+        inventory[0].inventoryItems.sort((a, b) => a[sort] < b[sort] ? 1 : -1);
+      }
     } else {
-      inventory[0].inventoryItem.sort((a, b) => a[sort] < b[sort] ? 1 : -1);
-    }
-  } else {
-    if (sort === 'item') {
-      inventory[0].inventoryItem.sort((a, b) => b[sort].name < a[sort].name ? 1 : -1);
-    } else {
-      inventory[0].inventoryItem.sort((a, b) => b[sort] < a[sort] ? 1 : -1);
+      if (sort === 'item') {
+        inventory[0].inventoryItems.sort((a, b) => b[sort].name < a[sort].name ? 1 : -1);
+      } else {
+        inventory[0].inventoryItems.sort((a, b) => b[sort] < a[sort] ? 1 : -1);
+      }
     }
   }
-  res.render('inventory/index', { title: 'My Inventory', inventory, sort });
+  res.render('inventory/index', { title: 'My Inventory', inventory, sort, expireMsg, formatDate, expiresSoon });
 }
 
 function newInventory(req, res) {
-  res.render('inventory/new', { title: 'New Inventory', errorMsg: ''});
+  res.render('inventory/new', { title: 'Add New Item to Inventory', errorMsg: ''});
 }
 
 async function create(req, res) {
@@ -94,7 +97,7 @@ async function create(req, res) {
           item: item._id,
           quantity: req.body.quantity,
           unit: req.body.unit,
-          expire: req.body.expire,
+          expire: formatDate(req.body.expire),
           location: req.body.location,
           favItem: !!req.body.favItem
       };
@@ -103,13 +106,13 @@ async function create(req, res) {
       let inventory = await Inventory.findOne({ user: userId });
       if (inventory) {
           // Inventory exists, add new item
-          inventory.inventoryItem.push(newInventoryItem);
+          inventory.inventoryItems.push(newInventoryItem);
           await inventory.save();
       } else {
           // No inventory found, create new
           await Inventory.create({
               user: userId,
-              inventoryItem: [newInventoryItem]
+              inventoryItems: [newInventoryItem]
           });
       }
     res.redirect('/inventory');
@@ -124,9 +127,9 @@ async function edit(req, res) {
   const userId = req.user._id;
   const id = req.params.id;
   try {
-    const inventory = await Inventory.findOne({user: userId, 'inventoryItem._id': id}, 'inventoryItem.$').populate('inventoryItem.item');
+    const inventory = await Inventory.findOne({user: userId, 'inventoryItems._id': id}, 'inventoryItems.$').populate('inventoryItems.item');
     if (!inventory) return res.render('/inventory');
-    const item = inventory.inventoryItem[0];
+    const item = inventory.inventoryItems[0];
     item.expireFormatted = formatDate(item.expire);
     res.render(`inventory/edit`, { title: 'Edit Inventory Item', item});
   } catch (err) {
@@ -146,4 +149,12 @@ function formatDate(date) {
   if (day.length < 2) 
       day = '0' + day;
   return [year, month, day].join('-');
+}
+
+function expiresSoon(date) {
+  if (!date) return false;
+  const today = new Date();
+  const expireDate = new Date(date);
+  const threeDaysLater = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
+  return expireDate <= threeDaysLater;
 }

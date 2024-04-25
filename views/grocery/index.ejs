@@ -7,21 +7,21 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col"></th>
-              <th scope="col"></th>
-              <th scope="col" class="text-start">Item</th>
+              <th scope="col" class="text-start bg-secondary"></th>
+              <th scope="col" class="text-start bg-secondary"></th>
+              <th scope="col" class="text-start bg-secondary"><h3>Item</h3></th>
             </tr>
           </thead>
           <tbody>
             <% grocery.groceryItem.forEach(function(i) { %>
               <tr>
-                <th scope="row"></th>
-                <td>
-                  <form action="/grocery/item/<%= i._id %>?_method=DELETE" method="POST">
+                <th scope="row" class="bg-warning"></th>
+                <td class="bg-warning align-middle">
+                  <form class="bg-warning" action="/grocery/item/<%= i._id %>?_method=DELETE" method="POST">
                     <button class="btn btn-outline-dark" type="submit">X</button>
                   </form>
                 </td>
-                <td class="text-start"><%= i.name %></td>
+                <td class="text-start bg-warning align-middle"><%= i.name %></td>
               </tr>
             <% }); %>
           </tbody>

@@ -1,6 +1,11 @@
 <%- include('../partials/header') %>
 
 <% if (inventory && inventory.length > 0) { %>
+  <% if (expiresSoon) { %>
+    <div class="d-flex justify-content-center">
+      <h4 class="text-danger"><%= expireMsg %></h4>
+    </div>
+  <% } %>
   <div class="d-flex justify-content-between mb-3 p-2">
     <a class="btn btn-outline-dark" href="/inventory/new">Create New Inventory Item</a>
     <div class="dropdown">
@@ -36,23 +41,23 @@
     </thead>
     <tbody>
       <% inventory.forEach(function(inv) { %>
-        <% inv.inventoryItem.forEach(function(i) { %>
+        <% inv.inventoryItems.forEach(function(i) { %>
         <tr>
           <th scope="row"></th>
-          <td><%= i.quantity %></td>
-          <td><%= i.unit ? i.unit : 'N/A' %></td>
-          <td><%= i.item.name %></td>
-          <td><%= new Date(i.createdAt).toLocaleDateString() %></td>
-          <td><%= i.expire ? new Date(i.expire).toLocaleDateString() : 'N/A' %></td>
-          <td><%= i.location %></td>
-          <td><%= i.favItem ? '❤️' : '' %></td>
+          <td class="align-middle"><%= i.quantity %></td>
+          <td class="align-middle"><%= i.unit ? i.unit : 'N/A' %></td>
+          <td class="align-middle"><%= i.item.name %></td>
+          <td class="align-middle"><%= new Date(i.createdAt).toLocaleDateString() %></td>
+          <td class="align-middle <%= expiresSoon(i.expire) ? 'text-danger' : '' %>"><%= i.expire ? formatDate(i.expire) : 'N/A' %></td>
+          <td class="align-middle"><%= i.location %></td>
+          <td class="align-middle"><%= i.favItem ? '❤️' : '' %></td>
           <td>
             <form action="/item/<%= i._id %>" method="POST">
               <input type="hidden" name="item" value="<%= i.item._id %>">
               <button class="btn btn-outline-dark" type="submit">Add</button>
             </form>
           </td>
-          <td><a href="/inventory/<%= i._id %>/edit" class="btn btn-outline-dark">Edit</a></td>
+          <td class="align-middle"><a href="/inventory/<%= i._id %>/edit" class="btn btn-outline-dark">Edit</a></td>
           <td>
               <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
                 <button class="btn btn-outline-dark" type="submit">DELETE</button>
