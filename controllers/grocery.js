@@ -25,8 +25,7 @@ async function addItem(req, res) {
     if (!item) {
       item = await Item.create({ name: req.body.item });
       await item.save();
-    }
-    
+    }    
     // Check for existing grocery list
     let grocery = await Grocery.findOne({user: req.user._id});
     if (grocery) {

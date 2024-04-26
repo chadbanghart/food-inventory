@@ -2,7 +2,10 @@
 
 <% if (inventory && inventory.length > 0) { %>
   <div class="d-flex justify-content-center">
-    <h4 class="text-danger"><%= inventoryMsg %></h4>
+    <h4 class="text-warning"><%= inventoryMsg %></h4>
+  </div>
+  <div class="d-flex justify-content-center">
+    <h4 class="text-danger"><%= expiredMsg %></h4>
   </div>
   <div class="d-flex justify-content-between mb-3 p-2">
     <a class="btn btn-outline-dark" href="/inventory/new">Create New Inventory Item</a>
@@ -50,7 +53,7 @@
           <td class="align-middle"><%= i.item.name %></td>
           <td class="align-middle"><%= new Date(i.createdAt).toLocaleDateString() %></td>
           <% let date = formatDate(i.expire) %>
-          <td class="align-middle <%= expiresSoon(i.expire) ? 'text-danger' : '' %>"><%= i.expire ? new Date(date).toLocaleDateString() : 'N/A' %></td>
+          <td class="align-middle <%= expiresSoon(i.expire) ? 'text-warning' : expiredFood(i.expire) ? 'text-danger' : '' %>"><%= i.expire ? new Date(date).toLocaleDateString() : 'N/A' %></td>
           <td class="align-middle"><%= i.category %></td>
           <td class="align-middle"><%= i.location %></td>
           <td class="align-middle"><%= i.favItem ? '❤️' : '' %></td>
@@ -62,9 +65,9 @@
           </td>
           <td class="align-middle"><a href="/inventory/<%= i._id %>/edit" class="btn btn-outline-dark">Edit</a></td>
           <td>
-              <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
-                <button class="btn btn-outline-dark" type="submit">DELETE</button>
-              </form>
+            <form action="/item/<%= i._id %>?_method=DELETE" method="POST">
+              <button class="btn btn-outline-dark" type="submit">DELETE</button>
+            </form>
           </td>
         </tr>
         <% }); %>

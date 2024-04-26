@@ -51,14 +51,19 @@ async function update(req, res) {
 async function index(req, res) {
   const inventory = await Inventory.find({ user: req.user._id }).populate('inventoryItems.item');
   let inventoryMsg = null;
+  let expiredMsg = null;
+  if (inventory && inventory.length > 0) {
   const expireMsg = 'You have Items that are about to expire! Consider removing from inventory and/or adding to your grocery list!';
-  const favItemExpireMsg = "One of your favorite items is about to expire. It has been added to your Grocery List for you!";
-  const bothMsg = 'You have both favorite items and regular items expiring soon! The favorite item has been added to your grocery list.';
+  const favItemExpireMsg = "One of your favorite items is about to expire. Don't forget to add it to your grocery list!";
+  const bothMsg = 'You have both favorite items and regular items expiring soon!';
+  const foodExpiredMsg = 'You have food that is past its expiration date! You may want to throw it away!'
   const favItemExpire = inventory[0].inventoryItems.some((i, idx) => (expiresSoon(i.expire) && i.favItem));
   const expirefilter = inventory[0].inventoryItems.some((i, idx) => (expiresSoon(i.expire) && !i.favItem));
+  const expiredFoodFilter = inventory[0].inventoryItems.some((i, idx) => (expiredFood(i.expire)));
   const bothExpire = favItemExpire && expirefilter;
   inventoryMsg = bothExpire ? bothMsg : favItemExpire ? favItemExpireMsg : expirefilter ? expireMsg : '';
-  
+  expiredMsg = expiredFoodFilter ? foodExpiredMsg : '';
+  }
   let sort = req.query.sort || 'createdAt';
   if (inventory  && inventory.length) {
     if (sort.includes('-')) {
@@ -76,7 +81,7 @@ async function index(req, res) {
       }
     }
   }
-  res.render('inventory/index', { title: 'My Inventory', inventory, sort, inventoryMsg: inventoryMsg, formatDate, expiresSoon });
+  res.render('inventory/index', { title: 'My Inventory', inventory, sort, inventoryMsg, expiredMsg, formatDate, expiresSoon, expiredFood });
 }
 
 function newInventory(req, res) {
@@ -92,8 +97,6 @@ async function create(req, res) {
       if (!item) {
           item = await Item.create({ name: req.body.item });
       }
-
-      // Construct the new inventory item object
       const newInventoryItem = {
           item: item._id,
           quantity: req.body.quantity,
@@ -103,18 +106,14 @@ async function create(req, res) {
           category: req.body.category,
           favItem: !!req.body.favItem
       };
-
-      // Check for existing inventory
       let inventory = await Inventory.findOne({ user: userId });
       if (inventory) {
-          // Inventory exists, add new item
           inventory.inventoryItems.push(newInventoryItem);
           await inventory.save();
       } else {
-          // No inventory found, create new
           await Inventory.create({
-              user: userId,
-              inventoryItems: [newInventoryItem]
+            user: userId,
+            inventoryItems: [newInventoryItem]
           });
       }
     res.redirect('/inventory');
@@ -157,6 +156,12 @@ function expiresSoon(date) {
   if (!date) return false;
   const today = new Date();
   const expireDate = new Date(date);
-  const threeDaysLater = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
-  return expireDate <= threeDaysLater;
+  const fiveDaysLater = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5);
+  return expireDate <= fiveDaysLater && expireDate > today;
+}
+function expiredFood(date) {
+  if (!date) return false;
+  const today = new Date();
+  const expireDate = new Date(date);
+  return expireDate < today;
 }

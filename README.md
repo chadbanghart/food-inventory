@@ -4,9 +4,9 @@ My app solves many of the issues people face when it comes to their food invento
 You can now track your food inventory and manage your grocery list with ease!
 
 ## Screenshots
-![app on load](images/onLoad.png)
-![inventory Page](images/inventoryList.png)
-![Grocery List Page](images.groceryList.png)
+![app on load](/public/images/onLoad.png)
+![inventory Page](/public/images/inventoryList.png)
+![Grocery List Page](/public/images/groceryList.png)
 
 ## Tech used
 - Javascript
