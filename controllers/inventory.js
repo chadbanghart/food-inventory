@@ -53,25 +53,10 @@ async function index(req, res) {
   let inventoryMsg = null;
   const expireMsg = 'You have Items that are about to expire! Consider removing from inventory and/or adding to your grocery list!';
   const favItemExpireMsg = "One of your favorite items is about to expire. It has been added to your Grocery List for you!";
-  const bothMsg = 'You have both favorite items and regular items expiring soon! The favorite item has been added to your grocery list.'
-  // inventory[0].inventoryItems.filter(function(i) {
-  //   let date = i.expire;
-  //   let favItem = i.favItem;
-  //   if (expiresSoon(date) && favItem) {
-  //     inventoryMsg = favItemExpireMsg;
-  //   } 
-  //   // else if (expiresSoon(date)) {
-  //   //   inventoryMsg = expireMsg;
-  //   // } else {
-  //   //   inventoryMsg = 'false';
-  //   // }
-  //   console.log(inventoryMsg);
-  // });
+  const bothMsg = 'You have both favorite items and regular items expiring soon! The favorite item has been added to your grocery list.';
   const favItemExpire = inventory[0].inventoryItems.some((i, idx) => (expiresSoon(i.expire) && i.favItem));
   const expirefilter = inventory[0].inventoryItems.some((i, idx) => (expiresSoon(i.expire) && !i.favItem));
   const bothExpire = favItemExpire && expirefilter;
-  console.log(bothExpire);
-  // inventoryMsg = favItemExpire ? favItemExpireMsg : expirefilter ? expireMsg : '';
   inventoryMsg = bothExpire ? bothMsg : favItemExpire ? favItemExpireMsg : expirefilter ? expireMsg : '';
   
   let sort = req.query.sort || 'createdAt';
